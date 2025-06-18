@@ -17,6 +17,9 @@ class BinListProvider implements BinProviderInterface
         try {
             $response = $this->getClient()->request('GET', $bin);
             $data = json_decode($response->getBody()->getContents(), true);
+            if (empty($data['country']['alpha2'])) {
+                throw new BinProviderException('Invalid response for bin: ' . $bin);
+            }
 
             return $data['country']['alpha2'];
 
